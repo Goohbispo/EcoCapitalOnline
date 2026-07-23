@@ -1,0 +1,4 @@
+node_modules/
+ecocapital.db
+ecocapital.db-*
+*.log

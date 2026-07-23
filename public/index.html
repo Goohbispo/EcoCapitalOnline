@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>EcoCapital — Lucro ou Legado?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- TELA 1: ONBOARDING -->
+  <section id="screen-onboarding" class="screen active">
+    <div class="boot-line">EC-OS v2035.1 <span class="dot">●</span> SIMULADOR DE CAPITALISMO VERDE</div>
+    <div class="top-nav-buttons">
+      <button id="btn-mobile-access" class="mobile-access-btn" type="button">📱 Acessar no celular</button>
+      <button id="btn-open-ranking" class="mobile-access-btn" type="button">🏆 Ranking dos jogadores</button>
+    </div>
+    <div class="card onboarding-card">
+      <h1 class="title">EcoCapital</h1>
+      <p class="subtitle">Lucro ou Legado?</p>
+      <p class="lede">2035. O planeta está no limite. Você vai administrar os próximos anos — mas alguém sempre paga a conta entre o discurso verde e a mudança real.</p>
+
+      <label class="field-label" for="input-username">Nome de usuário</label>
+      <input id="input-username" class="text-input" type="text" maxlength="40" placeholder="ex.: Aria_23" autocomplete="off" />
+
+      <p class="field-label">Escolha seu papel</p>
+      <div class="role-grid" id="role-grid">
+        <button class="role-card" data-role="empresa">
+          <span class="role-icon">◆</span>
+          <span class="role-name">Empresa</span>
+          <span class="role-desc">Cresça no mercado controlando impacto e reputação.</span>
+        </button>
+        <button class="role-card" data-role="governo">
+          <span class="role-icon">▲</span>
+          <span class="role-name">Governo</span>
+          <span class="role-desc">Regule, taxe e negocie acordos climáticos.</span>
+        </button>
+        <button class="role-card" data-role="ong">
+          <span class="role-icon">●</span>
+          <span class="role-name">ONG Ambiental</span>
+          <span class="role-desc">Denuncie, pressione e mobilize a sociedade.</span>
+        </button>
+      </div>
+
+      <button id="btn-start" class="btn-primary" disabled>Iniciar simulação</button>
+      <p id="onboarding-error" class="error-text" hidden></p>
+    </div>
+  </section>
+
+  <!-- TELA 4: RANKING COMPLETO DE JOGADORES -->
+  <section id="screen-ranking" class="screen">
+    <div class="ranking-page">
+      <div class="ranking-header">
+        <div>
+          <h1 class="ranking-title">Ranking dos jogadores</h1>
+          <p class="ranking-subtitle">Todas as partidas já iniciadas — finalizadas e em andamento.</p>
+        </div>
+        <button id="btn-ranking-back" class="btn-secondary" type="button">← Voltar</button>
+      </div>
+
+      <div class="card ranking-card">
+        <div id="ranking-table-wrap">
+          <table class="ranking-table" id="ranking-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Jogador</th>
+                <th>Papel</th>
+                <th>Status</th>
+                <th>Turno</th>
+                <th>Pontuação</th>
+                <th>Final</th>
+              </tr>
+            </thead>
+            <tbody id="ranking-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL: ACESSO VIA CELULAR (QR CODE) -->
+  <div id="modal-mobile" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <button id="modal-mobile-close" class="modal-close" aria-label="Fechar">✕</button>
+      <h2 class="modal-title">Acessar no celular</h2>
+      <p class="modal-text">Escaneie o código com a câmera do celular. O celular precisa estar na <strong>mesma rede Wi‑Fi</strong> deste computador.</p>
+      <div id="qr-container" class="qr-container"></div>
+      <p class="modal-url" id="modal-url">detectando endereço...</p>
+    </div>
+  </div>
+
+  <!-- TELA 2: JOGO -->
+  <section id="screen-game" class="screen">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="brand">EcoCapital</span>
+        <span class="role-badge" id="hud-role">—</span>
+      </div>
+      <div class="topbar-right">
+        <span class="hud-user" id="hud-username">—</span>
+        <span class="hud-turn">Turno <strong id="hud-turn">1</strong>/<span id="hud-maxturn">15</span></span>
+      </div>
+    </header>
+
+    <main class="game-main">
+      <!-- Medidor assinatura: gap entre reputação (discurso) e sustentabilidade real -->
+      <div class="gauge-panel card">
+        <div class="gauge-head">
+          <h2>Medidor de Greenwashing</h2>
+          <p class="gauge-sub">A distância entre o que se diz e o que se faz.</p>
+        </div>
+        <div class="gauge-wrap">
+          <svg id="gauge-svg" viewBox="0 0 240 140" aria-hidden="true"></svg>
+          <div class="gauge-readout">
+            <div class="gauge-value" id="gauge-value">0</div>
+            <div class="gauge-label">índice de greenwashing</div>
+          </div>
+        </div>
+        <div class="gauge-legend">
+          <span><i class="dot-real"></i> Sustentabilidade real</span>
+          <span><i class="dot-toxic"></i> Reputação / discurso</span>
+        </div>
+      </div>
+
+      <!-- Indicadores -->
+      <div class="indicators card">
+        <h2>Indicadores globais</h2>
+        <div class="indicator-grid" id="indicator-grid"><!-- injetado via JS --></div>
+      </div>
+
+      <!-- Resultado da rodada: consequência da decisão + evento (se houver) -->
+      <div class="newsflash" id="newsflash" hidden></div>
+
+      <!-- Decisões -->
+      <div class="decisions card">
+        <h2>Decisões deste turno</h2>
+        <div class="decision-list" id="decision-list"><!-- injetado via JS --></div>
+      </div>
+    </main>
+  </section>
+
+  <!-- TELA 3: FIM DE JOGO -->
+  <section id="screen-end" class="screen">
+    <div class="card end-card">
+      <p class="end-eyebrow">FIM DE SIMULAÇÃO</p>
+      <h1 class="end-ending" id="end-ending">—</h1>
+      <p class="end-score">Pontuação final: <strong id="end-score">0</strong>/100</p>
+      <p class="end-epilogue" id="end-epilogue"></p>
+      <div class="end-indicators" id="end-indicators"></div>
+      <p class="end-quote">“Salvar o planeta pode ser o melhor negócio do século.”</p>
+      <button id="btn-restart" class="btn-primary">Jogar novamente</button>
+
+      <div class="leaderboard">
+        <h2>Ranking local</h2>
+        <ol id="leaderboard-list" class="leaderboard-list"></ol>
+        <button id="btn-view-full-ranking" class="btn-secondary btn-full-ranking" type="button">Ver ranking completo de jogadores →</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
